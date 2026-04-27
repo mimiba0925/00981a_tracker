@@ -1,0 +1,277 @@
+/* CSS 變數定義 */
+:root {
+    --bg-dark: #0f1119;
+    --bg-card: rgba(30, 33, 48, 0.6);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-main: #f0f2f5;
+    --text-muted: #9aa0a6;
+    --color-buy: #00e676; /* 鮮明綠色 */
+    --color-sell: #ff1744; /* 醒目紅色 */
+    --color-neutral: #4fc3f7; /* 青色 */
+    --font-family: 'Outfit', sans-serif;
+    --glow-buy: rgba(0, 230, 118, 0.2);
+    --glow-sell: rgba(255, 23, 68, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    padding: 20px;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(30, 40, 80, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(80, 30, 50, 0.3) 0%, transparent 50%);
+    background-attachment: fixed;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Glassmorphism 共用效果 */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* 頂部導航 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 0;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 32px;
+}
+
+.logo-area h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.glass-select, .glass-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.glass-select:focus, .glass-input:focus {
+    border-color: var(--color-neutral);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.glass-select option {
+    background: var(--bg-dark);
+    color: var(--text-main);
+}
+
+/* 摘要卡片 */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    padding: 24px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.card-content .symbol {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.card-content .value {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* 顏色與狀態 */
+.buy { color: var(--color-buy); text-shadow: 0 0 10px var(--glow-buy); }
+.sell { color: var(--color-sell); text-shadow: 0 0 10px var(--glow-sell); }
+.neutral { color: var(--text-main); }
+.remove { color: var(--text-muted); text-decoration: line-through; }
+
+/* 資料表格 */
+.table-container {
+    padding: 24px;
+    overflow: hidden;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h2 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+th {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+}
+
+th:hover {
+    color: var(--text-main);
+}
+
+.sort-icon {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-left: 4px;
+}
+
+th.active-sort .sort-icon {
+    opacity: 1;
+    color: var(--color-neutral);
+}
+
+tbody tr {
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+    transform: scale(1.002);
+}
+
+.num-col {
+    text-align: right;
+    font-variant-numeric: tabular-nums; /* 對齊數字 */
+}
+
+/* 載入中動畫 */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-style: italic;
+    display: none; /* 預設隱藏 */
+}
+
+/* Badge 樣式 (增加持股/移除等) */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge.buy-badge {
+    background: rgba(0, 230, 118, 0.1);
+    color: var(--color-buy);
+    border: 1px solid rgba(0, 230, 118, 0.2);
+}
+
+.badge.sell-badge {
+    background: rgba(255, 23, 68, 0.1);
+    color: var(--color-sell);
+    border: 1px solid rgba(255, 23, 68, 0.2);
+}
+
+.badge.neutral-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .glass-input {
+        width: 100%;
+    }
+}
