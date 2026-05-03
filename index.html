@@ -4,78 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>00981a 追蹤神器</title>
-    <!-- 使用 Google Fonts: Outfit -->
+    <meta name="description" content="即時追蹤 00981a ETF 成分股異動與佔比動態走勢">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
 <body>
     <div class="app-container">
-        <!-- 頂部導航 -->
+
+        <!-- 頂部 Header -->
         <header class="header">
             <div class="logo-area">
                 <div class="logo-icon">📊</div>
-                <h1>00981a 追蹤神器</h1>
+                <div class="logo-text">
+                    <h1>00981a 追蹤神器</h1>
+                    <p class="logo-sub">AI 晶片ETF · 成分股監控</p>
+                </div>
             </div>
             <div class="controls">
-                <label for="date-select">日期：</label>
+                <label for="date-select" class="label-text">日期</label>
                 <select id="date-select" class="glass-select"></select>
             </div>
         </header>
 
-        <!-- 摘要卡片 -->
-        <section class="summary-cards">
-            <div class="card glass-card">
-                <h3>最大買進持股</h3>
-                <div id="top-buy" class="card-content">
-                    <span class="symbol">--</span>
-                    <span class="value buy">--</span>
-                </div>
-            </div>
-            <div class="card glass-card">
-                <h3>最大賣出持股</h3>
-                <div id="top-sell" class="card-content">
-                    <span class="symbol">--</span>
-                    <span class="value sell">--</span>
-                </div>
-            </div>
-            <div class="card glass-card">
-                <h3>總變化檔數</h3>
-                <div id="total-changes" class="card-content">
-                    <span class="value neutral">--</span>
-                </div>
-            </div>
-        </section>
+        <!-- Tabs -->
+        <div class="tabs" role="tablist">
+            <button class="tab-btn active" data-target="tab-daily" role="tab" aria-selected="true">
+                <span class="tab-icon">📋</span>
+                <span class="tab-label">每日異動明細</span>
+            </button>
+            <button class="tab-btn" data-target="tab-trend" role="tab" aria-selected="false">
+                <span class="tab-icon">🎬</span>
+                <span class="tab-label">成分股佔比動態</span>
+            </button>
+        </div>
 
-        <!-- 資料表格 -->
-        <section class="table-container glass-card">
-            <div class="table-header">
-                <h2>成分股異動明細</h2>
-                <div class="table-actions">
-                    <!-- 可以放搜尋框或過濾按鈕 -->
-                    <input type="text" id="search-input" class="glass-input" placeholder="搜尋代號或名稱...">
+        <!-- Tab: 每日異動明細 -->
+        <div id="tab-daily" class="tab-content active" role="tabpanel">
+            <!-- 摘要卡片 -->
+            <section class="summary-cards">
+                <div class="card glass-card">
+                    <h3>最大買進</h3>
+                    <div id="top-buy" class="card-content">
+                        <span class="symbol">--</span>
+                        <span class="value buy">--</span>
+                    </div>
                 </div>
-            </div>
-            <div class="table-wrapper">
-                <table id="data-table">
-                    <thead>
-                        <tr>
-                            <th data-sort="ChangeType">變化類別 <span class="sort-icon">↕</span></th>
-                            <th data-sort="Symbol">代號 <span class="sort-icon">↕</span></th>
-                            <th data-sort="Name">名稱 <span class="sort-icon">↕</span></th>
-                            <th data-sort="SharesChange" class="num-col">股數變化 <span class="sort-icon">↕</span></th>
-                            <th data-sort="WeightChange" class="num-col">權重變化(%) <span class="sort-icon">↕</span></th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <!-- 資料由 JS 動態載入 -->
-                    </tbody>
-                </table>
-            </div>
-            <div id="loading-spinner" class="loading">載入中...</div>
-        </section>
+                <div class="card glass-card">
+                    <h3>最大賣出</h3>
+                    <div id="top-sell" class="card-content">
+                        <span class="symbol">--</span>
+                        <span class="value sell">--</span>
+                    </div>
+                </div>
+                <div class="card glass-card">
+                    <h3>總異動檔數</h3>
+                    <div id="total-changes" class="card-content">
+                        <span class="value neutral">--</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 資料表格 -->
+            <section class="table-container glass-card">
+                <div class="table-header">
+                    <h2>成分股異動明細</h2>
+                    <div class="table-actions">
+                        <input type="text" id="search-input" class="glass-input" placeholder="🔍 搜尋代號或名稱...">
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="data-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="ChangeType">類別 <span class="sort-icon">↕</span></th>
+                                <th data-sort="Symbol">代號 <span class="sort-icon">↕</span></th>
+                                <th data-sort="Name" class="hide-mobile">名稱 <span class="sort-icon">↕</span></th>
+                                <th data-sort="SharesChange" class="num-col hide-mobile">股數變化 <span class="sort-icon">↕</span></th>
+                                <th data-sort="WeightChange" class="num-col">權重變化(%) <span class="sort-icon">↕</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+                <div id="loading-spinner" class="loading">載入中...</div>
+            </section>
+        </div>
+
+        <!-- Tab: 成分股佔比動態 -->
+        <div id="tab-trend" class="tab-content" role="tabpanel">
+            <section class="chart-section glass-card">
+                <!-- 圖表頂部控制列 -->
+                <div class="chart-header">
+                    <h2>成分股佔比走勢</h2>
+                    <div class="chart-top-controls">
+                        <span id="current-chart-date" class="chart-date-display">--</span>
+                        <button id="play-btn" class="glass-btn play-btn">▶ 播放</button>
+                    </div>
+                </div>
+
+                <!-- ECharts 圖表 -->
+                <div id="chart-container"></div>
+
+                <!-- 時間軸進度條 -->
+                <div class="timeline-panel">
+                    <button id="prev-btn" class="timeline-nav-btn" title="前一天">‹</button>
+
+                    <div class="timeline-track-wrap">
+                        <input
+                            type="range"
+                            id="timeline-slider"
+                            class="timeline-slider"
+                            min="0"
+                            value="0"
+                        >
+                        <div class="timeline-labels">
+                            <span id="timeline-label-start" class="tl-label">--</span>
+                            <span id="timeline-label-end" class="tl-label">--</span>
+                        </div>
+                    </div>
+
+                    <button id="next-btn" class="timeline-nav-btn" title="後一天">›</button>
+                </div>
+            </section>
+        </div>
+
     </div>
 
-    <!-- 載入解析 CSV 的工具 -->
     <script src="app.js"></script>
 </body>
 </html>
