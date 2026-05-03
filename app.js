@@ -357,10 +357,11 @@ function initChart() {
     state.chartInstance.setOption(option);
     window.addEventListener('resize', () => state.chartInstance.resize());
 
-    // 初始化進度條
+    // 初始化進度條 —— 預設停在最新日期
     const total = state.chartDates.length - 1;
+    state.currentChartDateIdx = total;          // ← 最新
     els.timelineSlider.max   = total;
-    els.timelineSlider.value = 0;
+    els.timelineSlider.value = total;           // ← 最新
     els.timelineLabelStart.textContent = formatDate(state.chartDates[0]);
     els.timelineLabelEnd.textContent   = formatDate(state.chartDates[total]);
     updateSliderFill();
